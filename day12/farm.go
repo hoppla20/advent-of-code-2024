@@ -131,12 +131,6 @@ func (f *farm) assignRegionNumbers() {
 						// merge two different regions if they have the same plant type
 						if curPlot.plantType == neighborPlot.plantType && curPlot.regionId != neighborPlot.regionId {
 							f.changeRegionId(neighborPos, curPlot.regionId)
-							// remove neighbors region id from list of assigned region ids
-							for i, id := range f.assignedRegions {
-								if id == neighborPlot.regionId {
-									f.assignedRegions = append(f.assignedRegions[:i], f.assignedRegions[i+1:]...)
-								}
-							}
 						}
 					}
 				}
