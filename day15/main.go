@@ -8,11 +8,11 @@ import (
 	"os"
 )
 
-func gpsCoordinate(position utils.Coordinate) int {
-	return position.Y*100 + position.X
+func boxGpsCoordinate(position utils.Coordinate) int {
+	return position.X + 100*position.Y
 }
 
-func part1(inputPath string) {
+func part2(inputPath string) {
 	warehouse, moves := loadInputFile(inputPath)
 
 	for _, m := range moves {
@@ -25,8 +25,9 @@ func part1(inputPath string) {
 	for y := range warehouse.height {
 		for x := range warehouse.width {
 			c := utils.Coordinate{X: x, Y: y}
-			if warehouse.spaceHolder(c) == box {
-				result += gpsCoordinate(c)
+			if warehouse.spaceHolder(c) == box_left {
+				log.Println("GPS of Box at coordinate", c, "->", boxGpsCoordinate(c))
+				result += boxGpsCoordinate(c)
 			}
 		}
 	}
@@ -48,5 +49,5 @@ func main() {
 	// disable logs
 	log.SetOutput(io.Discard)
 
-	part1(inputPath)
+	part2(inputPath)
 }

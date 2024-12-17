@@ -23,6 +23,10 @@ type OutOfBoundsError struct {
 
 var state CoordinateSystem
 
+func GetCoordinateSystemSize() CoordinateSystemSize {
+	return state.size
+}
+
 func SetCoordinateSystemSize(size CoordinateSystemSize) {
 	state.size = size
 }

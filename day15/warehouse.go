@@ -7,10 +7,12 @@ import (
 )
 
 const (
-	empty_rune = '.'
-	wall_rune  = '#'
-	robot_rune = '@'
-	box_rune   = 'O'
+	empty_rune     = '.'
+	wall_rune      = '#'
+	robot_rune     = '@'
+	box_rune       = 'O'
+	box_left_rune  = '['
+	box_right_rune = ']'
 )
 
 type spaceHolder int
@@ -20,6 +22,8 @@ const (
 	wall
 	robot
 	box
+	box_left
+	box_right
 )
 
 var holderRuneLookup = []rune{
@@ -27,6 +31,8 @@ var holderRuneLookup = []rune{
 	wall_rune,
 	robot_rune,
 	box_rune,
+	box_left_rune,
+	box_right_rune,
 }
 
 type direction int
@@ -76,7 +82,7 @@ func loadInputFile(filePath string) (*warehouse, []direction) {
 	log.Printf("Warehouse Lines:\n%s\n", strings.Join(warehouseLines, "\n"))
 
 	w.height = len(warehouseLines)
-	w.width = len(warehouseLines[0])
+	w.width = 2 * len(warehouseLines[0])
 
 	utils.SetCoordinateSystemSize(utils.CoordinateSystemSize{
 		Y: w.height,
@@ -89,16 +95,19 @@ func loadInputFile(filePath string) (*warehouse, []direction) {
 	}
 
 	for y := range w.height {
-		for x := range w.width {
+		for x := range w.width / 2 {
 			switch r := warehouseLines[y][x]; r {
 			case wall_rune:
-				w.spaces[y][x] = wall
+				w.spaces[y][2*x] = wall
+				w.spaces[y][2*x+1] = wall
 			case robot_rune:
-				w.robotPosition = utils.Coordinate{X: x, Y: y}
+				w.robotPosition = utils.Coordinate{X: 2 * x, Y: y}
 			case box_rune:
-				w.spaces[y][x] = box
+				w.spaces[y][2*x] = box_left
+				w.spaces[y][2*x+1] = box_right
 			case empty_rune:
-				w.spaces[y][x] = empty
+				w.spaces[y][2*x] = empty
+				w.spaces[y][2*x+1] = empty
 			default:
 				log.Fatal("Unkown space holder rune:", r)
 			}
